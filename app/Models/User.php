@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\SearchTrait;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,8 +13,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasRoles;
+    use SearchTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -24,8 +25,9 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'phone_number',
-        'company_id',
+        'address',
         'password',
+        'company_id'
     ];
 
     /**

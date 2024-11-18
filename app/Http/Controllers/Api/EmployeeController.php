@@ -2,25 +2,34 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\Interfaces\EmployeeInterface;
+use App\Helpers\PaginateHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Employees\EmployeeDetailResource;
+use App\Http\Resources\Employees\EmployeePaginateResource;
+use App\Models\User;
+use App\Response\HttpResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(
+        private readonly EmployeeInterface $employee)
     {
-        //
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      */
-    public function create()
+    public function index(): JsonResponse
     {
-        //
+        $data = $this->employee->get();
+        return HttpResponse::success(
+            EmployeePaginateResource::make($data, PaginateHelper::getPaginate($data)),
+            trans('alert.fetch_data_success'),
+            pagination: true
+        );
     }
 
     /**
@@ -34,9 +43,12 @@ class EmployeeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $employee): JsonResponse
     {
-        //
+        return HttpResponse::success(
+            EmployeeDetailResource::make($this->employee->show($employee->id)),
+            trans('alert.fetch_data_success')
+        );
     }
 
     /**

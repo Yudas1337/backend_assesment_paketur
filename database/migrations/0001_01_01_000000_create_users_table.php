@@ -12,9 +12,10 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->index();
-            $table->string('email')->unique();
-            $table->string('phone_number', 15)->nullable()->unique();
+            $table->string('name', 150)->index();
+            $table->string('email', 100)->unique();
+            $table->string('phone_number', 50)->nullable()->unique();
+            $table->text('address')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->foreignId('company_id')->nullable()->constrained();

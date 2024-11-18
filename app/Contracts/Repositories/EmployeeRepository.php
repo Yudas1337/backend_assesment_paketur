@@ -3,6 +3,7 @@
 namespace App\Contracts\Repositories;
 
 use App\Contracts\Interfaces\EmployeeInterface;
+use App\Enums\RoleEnum;
 use App\Models\User;
 
 class EmployeeRepository extends BaseRepository implements EmployeeInterface
@@ -32,7 +33,11 @@ class EmployeeRepository extends BaseRepository implements EmployeeInterface
      */
     public function get(): mixed
     {
-        // TODO: Implement get() method.
+        return $this->model->query()
+            ->role(RoleEnum::EMPLOYEE->value)
+            ->when(request()->sort, fn($query) => $query->orderBy('id', request()->sort))
+            ->when(request()->search, fn($query) => $query->search('name', request()->search))
+            ->paginate(request()->perPage);
     }
 
     /**
@@ -65,5 +70,19 @@ class EmployeeRepository extends BaseRepository implements EmployeeInterface
     public function update(mixed $id, array $data): mixed
     {
         // TODO: Implement update() method.
+    }
+
+    /**
+     * Handle get the specified data by id from models.
+     *
+     * @param mixed $id
+     *
+     * @return mixed
+     */
+    public function show(mixed $id): mixed
+    {
+        return $this->model->query()
+            ->role(RoleEnum::EMPLOYEE->value)
+            ->findOrFail($id);
     }
 }
