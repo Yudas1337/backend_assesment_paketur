@@ -7,4 +7,5 @@ return [
     'exists' => ':attribute tidak valid',
     'integer' => ':attribute harus berupa angka',
     'min' => ':attribute harus minimal :min',
+    'email' => ':attribute harus berupa email yang valid',
 ];

@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\RoleEnum;
+use App\Http\Controllers\Api\Company\StoreCompanyController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\LogoutController;
 use App\Http\Middleware\JwtMiddleware;
@@ -16,3 +18,6 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::post('logout', LogoutController::class);
 });
 
+Route::middleware(['role:' . RoleEnum::SUPER_ADMIN->value])->group(function () {
+    Route::post('companies', StoreCompanyController::class);
+});

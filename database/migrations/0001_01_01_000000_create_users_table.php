@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('phone_number', 15)->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->foreignId('company_id')->nullable()->constrained();
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

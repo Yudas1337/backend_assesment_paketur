@@ -38,6 +38,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (UnauthorizedException $e, Request $request) {
+            dd($request->user());
             if ($request->is('api/*') && $e->getStatusCode() == Response::HTTP_FORBIDDEN) {
                 return ResponseHelper::error(message: trans('alert.invalid_authorization'));
             }
