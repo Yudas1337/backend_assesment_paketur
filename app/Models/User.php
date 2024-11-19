@@ -3,15 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Base\Interfaces\HasEmployeeDetail;
 use App\Traits\SearchTrait;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, HasEmployeeDetail
 {
     use HasFactory, Notifiable, HasRoles;
     use SearchTrait;
@@ -22,12 +23,8 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
-        'phone_number',
-        'address',
-        'password',
-        'company_id'
+        'password'
     ];
 
     /**
@@ -58,6 +55,14 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims(): array
     {
         return [];
+    }
+
+    /**
+     * Get the employee detail of the user.
+     */
+    public function employeeDetail(): HasOne
+    {
+        return $this->hasOne(EmployeeDetail::class);
     }
 
     /**

@@ -43,13 +43,20 @@ class ManagerRepository extends BaseRepository implements ManagerInterface
      */
     public function store(array $data): mixed
     {
-        $role = $data['role'];
-        $data['password'] = bcrypt($data['password']);
+        $user = $this->model->query()->create([
+            'email' => $data['email'],
+            'password' => bcrypt($data['password'])
+        ]);
 
-        unset($data['role']);
-        $user = $this->model->query()->create($data);
+        $user->employeeDetail()->create([
+            'name' => $data['name'],
+            'user_id' => $user->id,
+            'company_id' => $data['company_id']
+        ]);
 
-        $user->assignRole($role);
+
+        $user->assignRole($data['role']);
+
         return $user;
     }
 

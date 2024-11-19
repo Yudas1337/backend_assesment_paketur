@@ -31,8 +31,8 @@ class ManagerAccountCreated implements ShouldQueue
             'name' => "manager-" . strtolower(str_replace(' ', '-', $this->company->name)),
             'email' => "manager-" . strtolower(str_replace(' ', '-', $this->company->name)) . '@gmail.com',
             'password' => bcrypt('password'),
-            'eamil_verified_at' => now(),
-            'role' => RoleEnum::MANAGER->value
+            'role' => RoleEnum::MANAGER->value,
+            'company_id' => $this->company->id,
         ]);
     }
 }

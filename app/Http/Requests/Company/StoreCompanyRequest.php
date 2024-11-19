@@ -38,8 +38,8 @@ class StoreCompanyRequest extends ApiRequest
             'email.max' => trans('validation.max', ['attribute' => 'email', 'max' => '100']),
             'email.unique' => trans('validation.unique', ['attribute' => 'email']),
             'phone_number.required' => trans('validation.required', ['attribute' => 'phone_number']),
-            'phone_number.max' => trans('validation.max', ['attribute' => 'phone_number', 'max' => '15']),
-            'phone_number.unique' => trans('validation.unique', ['attribute' => 'phone_number']),
+            'phone_number.max' => trans('validation.max', ['attribute' => 'Nomor Telefon', 'max' => '15']),
+            'phone_number.unique' => trans('validation.unique', ['attribute' => 'Nomor Telefon']),
         ];
     }
 }
