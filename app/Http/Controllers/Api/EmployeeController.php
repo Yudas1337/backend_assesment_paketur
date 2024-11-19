@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Contracts\Interfaces\EmployeeInterface;
 use App\Helpers\PaginateHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EmployeeRequest;
 use App\Http\Resources\Employees\EmployeeDetailResource;
 use App\Http\Resources\Employees\EmployeePaginateResource;
 use App\Models\User;
 use App\Response\HttpResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
@@ -34,10 +34,16 @@ class EmployeeController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param EmployeeRequest $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(EmployeeRequest $request): JsonResponse
     {
-        //
+        return HttpResponse::success(
+            $this->employee->store($request->validated()),
+            trans('alert.add_success')
+        );
     }
 
     /**
@@ -52,26 +58,31 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
+     *
+     * @param EmployeeRequest $request
+     * @param User $employee
+     * @return JsonResponse
      */
-    public function update(Request $request, string $id)
+    public function update(EmployeeRequest $request, User $employee): JsonResponse
     {
-        //
+        $this->employee->update($employee->id, $request->validated());
+        return HttpResponse::success(
+            message: trans('alert.update_success')
+        );
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param User $employee
+     * @return JsonResponse
      */
-    public function destroy(string $id)
+    public function destroy(User $employee): JsonResponse
     {
-        //
+        $this->employee->delete($employee->id);
+        return HttpResponse::success(
+            message: trans('alert.delete_success')
+        );
     }
 }

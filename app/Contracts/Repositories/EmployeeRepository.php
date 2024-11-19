@@ -23,7 +23,23 @@ class EmployeeRepository extends BaseRepository implements EmployeeInterface
      */
     public function delete(mixed $id): mixed
     {
-        // TODO: Implement delete() method.
+        return $this->show($id)->delete($id);
+    }
+
+    /**
+     * Handle get the specified data by id from models.
+     *
+     * @param mixed $id
+     *
+     * @return mixed
+     */
+    public function show(mixed $id): mixed
+    {
+        return $this->model->query()
+            ->role(RoleEnum::EMPLOYEE->value)
+            ->with('employeeDetail')
+            ->whereRelation('employeeDetail', 'company_id', '=', auth()->user()->employeeDetail->company_id)
+            ->findOrFail($id);
     }
 
     /**
@@ -51,14 +67,24 @@ class EmployeeRepository extends BaseRepository implements EmployeeInterface
      */
     public function store(array $data): mixed
     {
-        $role = $data['role'];
-        $data['password'] = bcrypt($data['password']);
+        $user = $this->model->query()->create([
+            'email' => $data['email'],
+            'password' => $data['password']
+        ]);
 
-        unset($data['role']);
-        $user = $this->model->query()->create($data);
+        $user->employeeDetail()->create([
+            'name' => $data['name'],
+            'user_id' => $user->id,
+            'company_id' => $data['company_id'],
+            'phone_number' => $data['phone_number'],
+            'address' => $data['address']
+        ]);
 
-        $user->assignRole($role);
+
+        $user->assignRole(RoleEnum::EMPLOYEE->value);
+
         return $user;
+
     }
 
     /**
@@ -71,22 +97,19 @@ class EmployeeRepository extends BaseRepository implements EmployeeInterface
      */
     public function update(mixed $id, array $data): mixed
     {
-        // TODO: Implement update() method.
-    }
+        $show = $this->show($id);
 
-    /**
-     * Handle get the specified data by id from models.
-     *
-     * @param mixed $id
-     *
-     * @return mixed
-     */
-    public function show(mixed $id): mixed
-    {
-        return $this->model->query()
-            ->role(RoleEnum::EMPLOYEE->value)
-            ->with('employeeDetail')
-            ->whereRelation('employeeDetail', 'company_id', '=', auth()->user()->employeeDetail->company_id)
-            ->findOrFail($id);
+        $show->update([
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+
+        $show->employeeDetail()->update([
+            'name' => $data['name'],
+            'phone_number' => $data['phone_number'],
+            'address' => $data['address'],
+        ]);
+
+        return $show;
     }
 }
