@@ -35,8 +35,9 @@ class EmployeeRepository extends BaseRepository implements EmployeeInterface
     {
         return $this->model->query()
             ->role(RoleEnum::EMPLOYEE->value)
+            ->with('employeeDetail')
             ->when(request()->sort, fn($query) => $query->orderBy('id', request()->sort))
-            ->when(request()->search, fn($query) => $query->search('name', request()->search))
+            ->when(request()->search, fn($query) => $query->searchRelation('employeeDetail', 'name', request()->search))
             ->paginate(request()->perPage);
     }
 
@@ -82,6 +83,7 @@ class EmployeeRepository extends BaseRepository implements EmployeeInterface
     public function show(mixed $id): mixed
     {
         return $this->model->query()
+            ->with('employeeDetail')
             ->role(RoleEnum::EMPLOYEE->value)
             ->findOrFail($id);
     }

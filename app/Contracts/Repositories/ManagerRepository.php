@@ -45,7 +45,7 @@ class ManagerRepository extends BaseRepository implements ManagerInterface
     {
         $user = $this->model->query()->create([
             'email' => $data['email'],
-            'password' => bcrypt($data['password'])
+            'password' => $data['password']
         ]);
 
         $user->employeeDetail()->create([

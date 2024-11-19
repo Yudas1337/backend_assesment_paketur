@@ -24,9 +24,9 @@ class EmployeePaginateResource extends JsonResource
     {
         $data = collect($this->resource->items())->map(function ($user) {
             return [
-                'name' => $user->name,
-                'phone_number' => $user->phone_number,
-                'address' => $user->address,
+                'name' => $user->employeeDetail->name,
+                'phone_number' => $user->employeeDetail->phone_number,
+                'address' => $user->employeeDetail->address,
             ];
 
         })->all();
