@@ -26,5 +26,22 @@ class EmployeeSeeder extends Seeder
                     'address' => fake()->address(),
                 ]);
             });
+
+        // for fixed employee for testing
+        $user = User::query()
+            ->create([
+                'email' => 'employee@gmail.com',
+                'password' => bcrypt('password'),
+                'remember_token' => str_random(10),
+                'email_verified_at' => now(),
+            ]);
+
+        $user->assignRole(RoleEnum::EMPLOYEE->value);
+        $user->employeeDetail()->create([
+            'name' => fake()->name(),
+            'phone_number' => fake()->unique()->phoneNumber(),
+            'company_id' => Company::query()->first()->id,
+            'address' => fake()->address(),
+        ]);
     }
 }

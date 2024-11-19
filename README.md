@@ -9,57 +9,81 @@
 
 ## Backed Assesment Paketur
 
-this is the description of the project
+this is the repository of the project from Backend Assessment Paketur
+
+![](docs/erd_database.png)
+
+## Project Setup
+
+1. **Dependencies Installation**
+
+   Run and Install dependent packages.
+   ```bash
+   composer install
+
+2. **Create Database**   
+   create db named 'paketur_db' in PostgreSQL or Mysql.
+
+
+3. Edit .env.example file and rename it to .env
+4. Edit .env file and change the database configurations. For example using PostgreSQL:
+    ```bash
+    DB_CONNECTION=pgsql
+    DB_HOST=127.0.0.1
+    DB_PORT=5432
+    DB_DATABASE=paketur_db
+    DB_USERNAME=postgres
+    DB_PASSWORD=yudas1337
+5. Add Another Environment Variable for JWT Secret Key
+     ```bash
+    JWT_SECRET=
+    JWT_SHOW_BLACKLIST_EXCEPTION=true
+
+6. Change the locale to ID so the validation message and faker data will be in Indonesian.
+    ```bash
+    APP_LOCALE=id
+    APP_FALLBACK_LOCALE=id
+    APP_FAKER_LOCALE=id_ID
+    ```
+7. Add Auth Guard api to .env file
+    ```bash
+   AUTH_GUARD=api
+
+8. Run this command to generate a new JWT secret key:
+    ```bash
+   php artisan jwt:secret
+
+9. Run the migration and seeding command:
+    ```bash
+   php artisan migrate:fresh --seed
+    ```
+10. Run the server:
+    ```bash
+    php artisan serve
+    ```
+11. Run worker so the laravel can dispatch the queue jobs
+    ```bash
+    php artisan queue:work
+
+12. and open the browser and visit http://localhost:8000 or http://127.0.0.1:8000 . More details in Postman
+    Documentation.
+
+
+13. Run The Test (optinonal):
+    ```bash
+    php artisan test
 
 ## API Postman Documentation
 
+for API and Endpoint Documentation can be accesed here:
 https://documenter.getpostman.com/view/8729842/2sAYBREt5T
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and
-creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in
-many web projects, such as:
+## Validation Rules Explaination
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache)
-  storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Third Party Libraries
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- [Spatie, Laravel Permissions](https://spatie.be/docs/laravel-permission/v6/installation-laravel). For managing user
+  roles and permissions.
+- [JwtAuth, tymon/jwt-auth](https://github.com/tymondesigns/jwt-auth). For Creating and Managing JWT Tokens.
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all
-modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a
-modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video
-tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging
-into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in
-becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
 

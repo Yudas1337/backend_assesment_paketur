@@ -18,7 +18,7 @@ class EmployeeRequest extends ApiRequest
             'email' => ['required', 'email', 'max:100', Rule::unique('users')->ignore($this->employee)],
             'name' => ['required', 'max:150'],
             'password' => ['required', 'min:8'],
-            'phone_number' => ['required', 'max:50', Rule::unique('employee_details')->ignore($this->employee->id, 'user_id')],
+            'phone_number' => ['required', 'max:50', Rule::unique('employee_details')->ignore($this->employee?->id, 'user_id')],
             'address' => ['required'],
             'company_id' => [
                 'required',

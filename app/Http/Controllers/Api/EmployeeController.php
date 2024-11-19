@@ -11,6 +11,7 @@ use App\Http\Resources\Employees\EmployeePaginateResource;
 use App\Models\User;
 use App\Response\HttpResponse;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class EmployeeController extends Controller
 {
@@ -42,7 +43,8 @@ class EmployeeController extends Controller
     {
         return HttpResponse::success(
             $this->employee->store($request->validated()),
-            trans('alert.add_success')
+            trans('alert.add_success'),
+            Response::HTTP_CREATED
         );
     }
 
