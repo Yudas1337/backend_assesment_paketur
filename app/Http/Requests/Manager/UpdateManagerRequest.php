@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Company;
+namespace App\Http\Requests\Manager;
 
 use App\Http\Requests\ApiRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\Rule;
 
-class StoreCompanyRequest extends ApiRequest
+class UpdateManagerRequest extends ApiRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -16,9 +16,11 @@ class StoreCompanyRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'max:150', Rule::unique('companies')->ignore($this->company)],
-            'email' => ['required', 'email', 'max:100', Rule::unique('companies')->ignore($this->company)],
-            'phone_number' => ['required', 'string', 'max:50', Rule::unique('companies')->ignore($this->company)],
+            'email' => ['required', 'email', 'max:100', Rule::unique('users')->ignore(auth()->id())],
+            'name' => ['required', 'max:150'],
+            'password' => ['required', 'min:8'],
+            'phone_number' => ['required', 'max:50', Rule::unique('employee_details')->ignore(auth()->id(), 'user_id')],
+            'address' => ['required']
         ];
     }
 
@@ -30,16 +32,16 @@ class StoreCompanyRequest extends ApiRequest
     public function messages(): array
     {
         return [
-            'name.required' => trans('validation.required', ['attribute' => 'name']),
-            'name.max' => trans('validation.max', ['attribute' => 'name', 'max' => '150']),
-            'name.unique' => trans('validation.unique', ['attribute' => 'name']),
             'email.required' => trans('validation.required', ['attribute' => 'email']),
             'email.email' => trans('validation.email', ['attribute' => 'email']),
             'email.max' => trans('validation.max', ['attribute' => 'email', 'max' => '100']),
             'email.unique' => trans('validation.unique', ['attribute' => 'email']),
-            'phone_number.required' => trans('validation.required', ['attribute' => 'phone_number']),
+            'name.required' => trans('validation.required', ['attribute' => 'name']),
+            'name.max' => trans('validation.max', ['attribute' => 'name', 'max' => '150']),
+            'phone_number.required' => trans('validation.required', ['attribute' => 'Nomor Telefon']),
             'phone_number.max' => trans('validation.max', ['attribute' => 'Nomor Telefon', 'max' => '50']),
             'phone_number.unique' => trans('validation.unique', ['attribute' => 'Nomor Telefon']),
+            'address.required' => trans('validation.required', ['attribute' => 'address']),
         ];
     }
 }

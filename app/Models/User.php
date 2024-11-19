@@ -7,6 +7,7 @@ use App\Base\Interfaces\HasEmployeeDetail;
 use App\Traits\SearchTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -15,7 +16,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject, HasEmployeeDetail
 {
     use HasFactory, Notifiable, HasRoles;
-    use SearchTrait;
+    use SearchTrait, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

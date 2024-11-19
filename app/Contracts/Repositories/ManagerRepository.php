@@ -23,18 +23,6 @@ class ManagerRepository extends BaseRepository implements ManagerInterface
     }
 
     /**
-     * Handle get the specified data by id from models.
-     *
-     * @param mixed $id
-     *
-     * @return mixed
-     */
-    public function show(mixed $id): mixed
-    {
-        // TODO: Implement show() method.
-    }
-
-    /**
      * Handle store data event to models.
      *
      * @param array $data
@@ -70,6 +58,32 @@ class ManagerRepository extends BaseRepository implements ManagerInterface
      */
     public function update(mixed $id, array $data): mixed
     {
-        // TODO: Implement update() method.
+        $show = $this->show($id);
+
+        $show->update([
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+
+        $show->employeeDetail()->update([
+            'name' => $data['name'],
+            'phone_number' => $data['phone_number'],
+            'address' => $data['address'],
+        ]);
+
+        return $show;
+    }
+
+    /**
+     * Handle get the specified data by id from models.
+     *
+     * @param mixed $id
+     *
+     * @return mixed
+     */
+    public function show(mixed $id): mixed
+    {
+        return $this->model->query()
+            ->findOrFail($id);
     }
 }
