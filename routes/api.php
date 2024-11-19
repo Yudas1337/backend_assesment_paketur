@@ -22,7 +22,8 @@ Route::middleware([JwtMiddleware::class])->group(function () {
 });
 
 Route::middleware(['role:' . RoleEnum::MANAGER->value])->group(function () {
-    Route::patch('update-manager', UpdateManagerController::class);
+    Route::patch('update-manager-profile', [ManagerController::class, 'update']);
+    Route::apiResource('managers', ManagerController::class)->only('index', 'show');
     Route::apiResource('employees', EmployeeController::class)->only('store', 'update', 'destroy');
 });
 

@@ -15,7 +15,7 @@ class EmployeeSeeder extends Seeder
     public function run(): void
     {
         User::factory()
-            ->count(1)
+            ->count(5)
             ->create()
             ->each(function (User $user) {
                 $user->assignRole(RoleEnum::EMPLOYEE->value);

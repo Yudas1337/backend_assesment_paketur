@@ -3,6 +3,7 @@
 namespace App\Contracts\Repositories;
 
 use App\Contracts\Interfaces\ManagerInterface;
+use App\Enums\RoleEnum;
 use App\Models\User;
 
 class ManagerRepository extends BaseRepository implements ManagerInterface
@@ -19,7 +20,13 @@ class ManagerRepository extends BaseRepository implements ManagerInterface
      */
     public function get(): mixed
     {
-        // TODO: Implement get() method.
+        return $this->model->query()
+            ->role(RoleEnum::MANAGER->value)
+            ->with('employeeDetail')
+            ->whereRelation('employeeDetail', 'company_id', '=', auth()->user()->employeeDetail->company_id)
+            ->when(request()->sort, fn($query) => $query->orderBy('id', request()->sort))
+            ->when(request()->search, fn($query) => $query->searchRelation('employeeDetail', 'name', request()->search))
+            ->paginate(request()->perPage);
     }
 
     /**
@@ -84,6 +91,9 @@ class ManagerRepository extends BaseRepository implements ManagerInterface
     public function show(mixed $id): mixed
     {
         return $this->model->query()
+            ->role(RoleEnum::MANAGER->value)
+            ->with('employeeDetail')
+            ->whereRelation('employeeDetail', 'company_id', '=', auth()->user()->employeeDetail->company_id)
             ->findOrFail($id);
     }
 }
