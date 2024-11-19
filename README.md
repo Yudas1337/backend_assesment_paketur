@@ -69,7 +69,7 @@ this is the repository of the project from Backend Assessment Paketur
     Documentation.
 
 
-13. Run The Test (optinonal):
+13. Run The Test (optional):
     ```bash
     php artisan test
 
@@ -79,6 +79,76 @@ for API and Endpoint Documentation can be accesed here:
 https://documenter.getpostman.com/view/8729842/2sAYBREt5T
 
 ## Validation Rules Explaination
+
+In this documentation, i will just explain the most important validation. So, the another request with similar and same
+functionality will not be explained again.
+
+1. StoreCompanyRequest
+
+    ```bash
+    return [
+            'name' => ['required', 'max:150', Rule::unique('companies')->ignore($this->company)],
+            'email' => ['required', 'email', 'max:100', Rule::unique('companies')->ignore($this->company)],
+            'phone_number' => ['required', 'string', 'max:50', Rule::unique('companies')->ignore($this->company)],
+        ];
+    ```
+   Detail Explanation:
+    * Name:
+        * Required: Cannot be Null
+        * Max(150): maximize the character so it will not trigger database error if the data is too long.
+        * Unique: the Company name will not be duplicated.
+        * Ignore: This is for further validation, if the company can be updated, it will ignore the current property id
+          using laravel dependency injection
+          from given company parameter. So if the value from ignore method is null, it will ignore nothing.
+    * Email:
+        * Email: the email must be valid email format. for examle: johndoe@gmail.com, must have @ symbol or etherwise it
+          will not be valid.
+
+
+2. UpdateManagerRequest
+
+    ```bash
+     return [
+            'email' => ['required', 'email', 'max:100', Rule::unique('users')->ignore(auth()->id())],
+            'name' => ['required', 'max:150'],
+            'password' => ['required', 'min:8'],
+            'phone_number' => ['required', 'max:50', Rule::unique('employee_details')->ignore(auth()->id(), 'user_id')],
+            'address' => ['required']
+        ];
+    ```
+   Detail Explanation:
+    * Password:
+        * Mininum 8: Standart Minimum password at least 8 characters
+    * Email:
+        * Unique: the email must not be duplicated from users table.
+        * Ignore : And will ignore the validation from current user id (From Authentication Session)
+    * Phone Number:
+        * Unique: the phone number must not be duplicated from employee_details table.
+        * Ignore : And will ignore the validation from current user id (From Authentication Session) and the column name
+          is user_id
+
+
+3. EmployeeRequest
+    ```bash
+     return [
+            'email' => ['required', 'email', 'max:100', Rule::unique('users')->ignore($this->employee)],
+            'name' => ['required', 'max:150'],
+            'password' => ['required', 'min:8'],
+            'phone_number' => ['required', 'max:50', Rule::unique('employee_details')->ignore($this->employee?->id, 'user_id')],
+            'address' => ['required'],
+            'company_id' => [
+                'required',
+                Rule::exists('companies', 'id')->where(function ($query) {
+                    $query->where('id', auth()->user()->employeeDetail->company_id);
+                })
+            ],
+        ];
+    ```
+   Detail Explanation:
+    * Company Id:
+        * Exists: the company id must be exist in companies table and column id. Then, the provided id must be equal to
+          the current user auth session company id. Because, we assume that the user or the manager can only create
+          employee from the same company.
 
 ## Third Party Libraries
 
